@@ -1,0 +1,47 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: myprojectinventory
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: inventario-backend
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region : us-east-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action: 
+        - dynamodb:*
+      Resource:
+        - arn:aws:dynamodb:us-east-2:975050300132:table/Inventario
+
+functions:
+  hello:
+    handler: src/hello.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+  agregarProducto:
+    handler: src/agregarProducto.agregarProducto
+    events:
+      - httpApi:
+          path: /productos
+          method: post
+  listarProductos:
+    handler : src/listarProductos.listarProductos
+    events:
+      - httpApi:
+          path: /productos
+          method: get
+  obtenerProducto:
+    handler : src/obtenerPorId.obtenerProducto
+    events:
+      - httpApi:
+          path : /productos/{id}
+          method: get
+  actualizarProducto:
+    handler : src/actualizarProducto.actualizarProducto
+    events :
+      - httpApi:
+          path : /productos/{id}
+          method : put
